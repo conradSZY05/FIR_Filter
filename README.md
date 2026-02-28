@@ -29,3 +29,9 @@ image 1.1
 ![Screenshot 2026-02-26 170715](https://github.com/user-attachments/assets/b13553aa-e144-479b-bb43-dcf9621d4ce5)
 
 
+Some issues that may need addressing:
+- an output of 32 bits does not take into account that in the worst case, when you sum 15 16-bit values, a 32 bit register will overflow, so realistically the output should be more like 36-bits.
+- the multiplying part and accumulating part of the FIR filter happen in two seperate processes, so the accumulator always works on the previous set of multiplications, ideally this should not happen but being aware that there is a 2 cycle latency is good enough for this project.
+
+Considerations for improvements:
+- right now this is written for Vivado, it could be used on an FPGA like the basys 3 as I originally intended but that requires extra hardware such as a DAC.
