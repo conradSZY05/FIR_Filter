@@ -10,7 +10,7 @@ entity FIR_filter is
         OUTPUT_WIDTH : integer := 38 -- 16 bit samples multiplied with 16 bit coefficients, summed 53 (53 taps) times is 38 bits for no overflow
     );
     port (
-        clk, reset, enable : in std_logic;
+        clk, reset: in std_logic;
         data_i : in std_logic_vector(INPUT_WIDTH-1 downto 0);
         data_o : out std_logic_vector(OUTPUT_WIDTH-1 downto 0)
     );
@@ -40,34 +40,55 @@ architecture rtl of FIR_filter is
     signal mreg_s : mult_registers := (others => (others => '0'));
     
     -- accumulator
-    type acc_registers is array (0 to NUM_TAPS-1) of signed(MULT_WIDTH-1 downto 0);
+    type acc_registers is array (0 to NUM_TAPS-1) of signed(OUTPUT_WIDTH-1 downto 0);
     signal areg_s : acc_registers := (others => (others => '0'));
     
 begin
+    data_o <= std_logic_vector(areg_s(0));
 
     process(clk)
     begin
         if rising_edge(clk) then
-            
-            
             if (reset = '1') then
                 for i in 0 to NUM_TAPS-1 loop
                     ireg_s(i) <= (others => '0');
                     mreg_s(i) <= (others => '0');
-                    areg_s(i) <= (others => '0');
                 end loop;
             else
                 -- start shift
                 ireg_s(0) <= signed(data_i);
-                
                 for i in 1 to NUM_TAPS-1 loop
                     ireg_s(i) <= ireg_s(i-1);
-                    
-                    
-                    
                 end loop;
+                
+                -- multiply
+                for i in 0 to NUM_TAPS-1 loop
+                    mreg_s(i) <= ireg_s(i) * TAPS(i);
+                end loop;
+                
             end if;
         end if; 
+    end process;
+    
+    
+    -- accumulate
+    process(clk)
+    begin
+        if rising_edge(clk) then
+            if (reset = '1') then
+                for i in 0 to NUM_TAPS-1 loop
+                    areg_s(i) <= (others => '0');
+                end loop;
+            else
+                for i in 0 to NUM_TAPS-1 loop
+                    if (i < NUM_TAPS-1) then
+                        areg_s(i) <= resize(mreg_s(i), OUTPUT_WIDTH) + areg_s(i+1);
+                    elsif (i = NUM_TAPS-1) then
+                        areg_s(i) <= resize(mreg_s(i), OUTPUT_WIDTH);
+                    end if;
+                end loop;
+            end if;
+        end if;
     end process;
   
 end rtl;

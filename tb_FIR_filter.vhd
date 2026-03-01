@@ -14,7 +14,6 @@ end tb_FIR_filter;
 architecture sim of tb_FIR_filter is
     signal clk : std_logic := '0';
     signal reset : std_logic := '0';
-    signal enable : std_logic := '0';
     signal data_i : std_logic_vector(INPUT_WIDTH-1 downto 0) := (others => '0');
     signal data_o : std_logic_vector(OUTPUT_WIDTH-1 downto 0) := (others => '0');
     
@@ -26,7 +25,6 @@ begin
     port map (
         clk => clk,
         reset => reset,
-        enable => enable,
         data_i => data_i,
         data_o => data_o
     );
@@ -41,11 +39,10 @@ begin
         reset <= '0';
         wait for CLK_PERIOD;
         
-        for i in 0 to 5 loop
-            data_i <= std_logic_vector(unsigned(data_i) + 1);
-            wait for CLK_PERIOD;
-        end loop;
+        data_i <= b"0000000000000001";
+        wait for CLK_PERIOD;
+        data_i <= b"0000000000000000";
         
-        wait;
+        wait for 100 * CLK_PERIOD;
     end process;
 end sim;
