@@ -17,7 +17,7 @@ Before writing a testbench for real signals, I'll use some known values such as 
 What this shows, although correct, is the pipeline delay because of how the filter is implemented. The multiplication uses freshly shifted input values, but the accumulation occurs in another process i.e. reads in the next clock cycle. So the 0 signals between coefficients in the image above is a result of multiplication of 0 with the coefficients after the impulse shifts through. 
 
 ## DC
-Since the implementation uses a pipeline, an input of just "0000000000000001" will result in the pipeline being filled for 53 taps and settling to the sum of all coefficients which is 25172.
+Since the implementation uses a pipeline, an input of just "0000000000000001" will result in the pipeline being filled for 55 clock cycles and settling to the sum of all coefficients which is 25172.
 <img width="956" height="305" alt="Screenshot 2026-03-02 204252" src="https://github.com/user-attachments/assets/778a3797-8a4b-4bc2-9bb7-0fbfb487371d" />
 
 ## Square Wave
