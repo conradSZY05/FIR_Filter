@@ -11,8 +11,13 @@ Anything above 40-50 Hz on a heartbeat signal (ECG) is mostly noise, so choosing
 <img width="1584" height="877" alt="Screenshot 2026-03-01 140218" src="https://github.com/user-attachments/assets/0bb5b559-8b78-45f7-a55b-5970650e2904" />
     
 # Testing the filter
-## Impulse response
+## Impulse
 Before writing a testbench for real signals, I'll use some known values such as an impulse response. That is a single impulse "0000000000000001" for a clock cycle and then a "0000000000000000" input, which will just return my tap coefficients.
 <img width="964" height="209" alt="Screenshot 2026-03-01 171641" src="https://github.com/user-attachments/assets/06b13f51-c923-4645-be23-c77b0ea3d394" />
-    
 What this shows, although correct, is the pipeline delay because of how the filter is implemented. The multiplication uses freshly shifted input values, but the accumulation occurs in another process i.e. reads in the next clock cycle. So the 0 signals between coefficients in the image above is a result of multiplication of 0 with the coefficients after the impulse shifts through. 
+
+## DC
+Since the implementation uses a pipeline, an input of just "0000000000000001" will result in the pipeline being filled for 53 taps and settling to the sum of all coefficients which is 25172.
+<img width="956" height="305" alt="Screenshot 2026-03-02 204252" src="https://github.com/user-attachments/assets/778a3797-8a4b-4bc2-9bb7-0fbfb487371d" />
+
+## Square Wave
