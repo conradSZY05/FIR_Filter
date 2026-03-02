@@ -21,3 +21,10 @@ Since the implementation uses a pipeline, an input of just "0000000000000001" wi
 <img width="956" height="305" alt="Screenshot 2026-03-02 204252" src="https://github.com/user-attachments/assets/778a3797-8a4b-4bc2-9bb7-0fbfb487371d" />
 
 ## Square Wave
+A square wave at a frequency well within the passband should result in an output that resembles a triangle or sine wave more or less. A square wave at a frequency above the cutoff frequency and in the stopband will result in high attenuation, so smaller amplitude and less visible oscillation.
+### 20 Hz Square Wave
+<img width="938" height="459" alt="Screenshot 2026-03-02 211409" src="https://github.com/user-attachments/assets/5dc701b5-5ba7-4db1-b2ee-36c8be308e2d" /><img width="954" height="482" alt="Screenshot 2026-03-02 211345" src="https://github.com/user-attachments/assets/88da7fb4-daef-4f98-8685-6b6929c27e1c" />
+
+
+### 60 Hz Square Wave
+
