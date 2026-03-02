@@ -12,7 +12,7 @@ Anything above 40-50 Hz on a heartbeat signal (ECG) is mostly noise, so choosing
     
 # Testing the filter
 ## Impulse
-Before writing a testbench for real signals, I'll use some known values such as an impulse response. That is a single impulse "0000000000000001" for a clock cycle and then a "0000000000000000" input, which will just return my tap coefficients.
+Before writing a testbench for real signals, I'll use some known values such as an impulse. That is a single impulse "0000000000000001" for a clock cycle and then a "0000000000000000" input, which will just return my tap coefficients.
 <img width="964" height="209" alt="Screenshot 2026-03-01 171641" src="https://github.com/user-attachments/assets/06b13f51-c923-4645-be23-c77b0ea3d394" />
 What this shows, although correct, is the pipeline delay because of how the filter is implemented. The multiplication uses freshly shifted input values, but the accumulation occurs in another process i.e. reads in the next clock cycle. So the 0 signals between coefficients in the image above is a result of multiplication of 0 with the coefficients after the impulse shifts through. 
 
