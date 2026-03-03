@@ -1,4 +1,3 @@
-<img width="1906" height="892" alt="image" src="https://github.com/user-attachments/assets/33b46ca8-1f0c-4ccc-8683-44f87624e993" /># FIR_Filter
 a simple low pass parallel FIR filter for a heart rate made using VHDL, simulated in Vivado.
     
 Filter designed using http://t-filter.engineerjs.com/
