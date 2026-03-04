@@ -1,6 +1,8 @@
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 use IEEE.NUMERIC_STD.ALL;
+use std.textio.all;
+use ieee.std_logic_textio.all;
 
 entity tb_FIR_filter is
     generic (
@@ -17,7 +19,7 @@ architecture sim of tb_FIR_filter is
     signal data_i : std_logic_vector(INPUT_WIDTH-1 downto 0) := (others => '0');
     signal data_o : std_logic_vector(OUTPUT_WIDTH-1 downto 0) := (others => '0');
     
-    constant C_TEST_CASE : string := "sine"; -- impulse, DC, square, sine, heartbeat
+    constant C_TEST_CASE : string := "ECG"; -- impulse, DC, square, sine, heartbeat
     
     constant SAMPLING_FREQ : real := 500.0;
     constant CLK_PERIOD : time := 2 ms; -- asmple rate 500 Hz
@@ -43,8 +45,6 @@ architecture sim of tb_FIR_filter is
     constant SINE_FREQ : integer := 60;
     constant LUT_INCREMENT : integer := integer((SINE_FREQ * 64) / 500); -- 2.5... for 20 Hz
     
-    
-    
 begin
     uut : entity work.FIR_filter(rtl)
     port map (
@@ -56,7 +56,12 @@ begin
     
     clk <= not clk after CLK_PERIOD / 2;
 
-    process
+    process is
+        -- reading raw ECG data from file
+        variable line_v : line;
+        file read_file : text;
+        variable ecg_v : integer; -- output file is in decimal
+        
     begin
         reset <= '1';
         wait for CLK_PERIOD;
@@ -100,7 +105,21 @@ begin
                 wait for CLK_PERIOD;
             end loop;
             
-        elsif C_TEST_CASE = "heartbeat" then
+        elsif C_TEST_CASE = "ECG" then
+        
+            for j in 0 to 100 loop
+            
+                file_open(read_file, "ECG/ecg_data.txt", read_mode); -- REPLACE THIS WITH ABSOLUTE PATH OTHERWISE WILL FAIL ON WHILE
+                while not endfile(read_file) loop
+                    readline(read_file, line_v);
+                    read(line_v, ecg_v);
+                    -- report "ecg_v: " & to_hstring(ecg_v);
+                    data_i <= std_logic_vector(to_signed(ecg_v, INPUT_WIDTH));
+                    
+                    wait for CLK_PERIOD;
+                end loop;
+                file_close(read_file);
+            end loop;
             
         end if;
         
