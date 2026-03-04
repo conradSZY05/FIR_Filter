@@ -47,3 +47,8 @@ Here is the result:
 Zooming in to get a closer look:
 <img width="956" height="464" alt="Screenshot 2026-03-04 202332" src="https://github.com/user-attachments/assets/ce54f830-4a95-4600-b7b0-7c11d03e6d7d" />
 The sharp spikes are the QRS complexes, these are the main heartbeat. The P waves are the small bumps before the QRS and the T waves are the small bumps after the QRS. All bumps in between are low frequency noise. When input into the filter, the result is a waveform with a more stable baseline, smoother waveform as the high frequency components are filtered out and rounded out. The main features are kept intact (QRS complexes, P and T waves), so essentially what this filter has done to a real ECG is keep the essential ECG features intact while filtering out high frequency noise, resulting in a smoother, readable waveform.
+    
+    
+## Notes
+- this filter could be improved by making it real time, there is currently a 2 cycle delay because of the separation of the shifting+multiplying and accumulating processes.
+- this is a parallel filter implementation, meaning every multiply-add operation requires dedicated hardware which may become costly in resources in extensive filters. Series implementation could be used to mitigate this, although not entirely necessary since this is just a simulation, but series FIR filters allow implementation of filters of a much greater order than parallel.
