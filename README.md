@@ -39,3 +39,11 @@ Output peak to peak ~10,026,514
 ### 60 Hz Sine Wave
 <img width="953" height="446" alt="Screenshot 2026-03-03 210427" src="https://github.com/user-attachments/assets/17afd97a-b3f8-40a0-8121-ec928d3b1e18" />
 Output peak to peak ~54,954. This 60 Hz sine wave experienced almost a 182 times attenuation than the 20 Hz sine wave, thats a 45 dB attenuation! With some noise potentially due to the signal being so attenuated, quantisation effects or small parts of the 60 Hz signal making it through since it is not so far into the stopband.
+
+## Real ECG data
+I will use this ECG data resource [https://physionet.org/content/ptb-xl/1.0.3/] as it provides real ECG data recorded from real people at a sampling rate of 500 Hz and 16 bit precision both of which match the sampling frequency and input resolution of this filter. I took a random ECG sample from this database, and used the python script available in the ECG folder in this repository to extract signed decimal values I could use as inputs in the testbench.
+Here is the result:
+<img width="957" height="437" alt="Screenshot 2026-03-04 202306" src="https://github.com/user-attachments/assets/ee8278a6-b074-4ae2-be65-4fb4adeb3d7d" />
+Zooming in to get a closer look:
+<img width="956" height="464" alt="Screenshot 2026-03-04 202332" src="https://github.com/user-attachments/assets/ce54f830-4a95-4600-b7b0-7c11d03e6d7d" />
+The sharp spikes are the QRS complexes, these are the main heartbeat. The P waves are the small bumps before the QRS and the T waves are the small bumps after the QRS. All bumps in between are low frequency noise. When input into the filter, the result is a waveform with a more stable baseline, smoother waveform as the high frequency components are filtered out and rounded out. The main features are kept intact (QRS complexes, P and T waves), so essentially what this filter has done to a real ECG is keep the essential ECG features intact while filtering out high frequency noise, resulting in a smoother, readable waveform.
